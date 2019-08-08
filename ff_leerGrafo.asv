@@ -1,0 +1,11 @@
+%Leer grafo
+function [leerGrafo, dest] = ff_leerGrafo()
+% ngrafo = input('Archivo de grafo = ', 's');
+% nd = input('Número de destinos = ');
+ngrafo = strcat(ngrafo,int2str(nd),'des.txt');
+dest = dlmread(ngrafo,' ', [1 0 1 nd-1]);
+C = dlmread(ngrafo,' ',2,0);
+fprintf('Nodos destinos\n');
+disp(dest);
+leerGrafo=C;
+end
