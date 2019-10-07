@@ -17,4 +17,4 @@ cd scripts/networkCodingValidator
 #Dice si el grafo resultante es valido o no
 NetworkC=$(grep ok -n $f-sim-let.out | wc -l)
 if [ ! $NetworkC == 0 ]; then echo si, si es valido con Networ Coding; else echo no, no es valido con Network Coding; fi
-
+rm -r ../../Results.txt
