@@ -59,7 +59,7 @@ clear all;
 close all;
 [C, dest] = ff_leerGrafo();
 tic
-ff_grafo(C,dest,[3 5]);
+%ff_grafo(C,dest,[3 5]);
 nn = length(C);
 ndest = length(dest);
 flumaxrut = [];
@@ -356,7 +356,7 @@ fprintf('Grafo General de Flujo Maximo por Arco:\n');
 ff_escribirGrafo(minmaxflujo);
 
 %Ruta en el PC de escritorio de la oficina
-ruta='/home/pedross/Documents/PFiles/';
+ruta= strcat(pwd,"/scripts/networkCodingValidator/");
 %Ruta en el portátil de la tesis:
 %ruta='C:\Users\usuario\Downloads\z3-4.5.0z-x86-win\bin\';
 %Ruta para que los archivos queden en Google Drive del portátil
