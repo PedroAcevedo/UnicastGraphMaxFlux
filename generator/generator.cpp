@@ -39,12 +39,23 @@ class Graph {
     }
 
     bool existsEdge(int a, int b){
-    	return contains(adj.at(a),b);
+    	if(adj.find(a) != adj.end()){
+    		return contains(adj.at(a),b);
+    	}
+    	return false;
     }
 
-    int getWeight(int n){
-    	return adj.at(n).size();
+    int getWeightOUT(int n){
+    	if(adj.find(n) != adj.end()){
+    		return adj.at(n).size();
+    	}
+    	return 0;
     }
+
+    int getWeightIN(int n){
+    	return weightNode.at(n);
+    }
+
 
     void removeEdge(int a, int b){
     	if(existsEdge(a,b)){
@@ -123,76 +134,90 @@ Graph generateMinGraph(int noNodes, list<int> sinks){
 	return graph;
 }
 
-/*list<int> getRandomElements(list<int> L, int noElements){
-	list<int> randomElements;
-	if(L.size() > noElements){
-		srand (time(NULL));
-		while(noElements > 0){
-			int element = rand() % L.size() + 1;
-			list<int> :: iterator it = next(L.begin(), element);
-			randomElements.push_back(*it);
-			noElements--;
-		}
-	}else{
-		return NULL;
-	}
-	return randomElements;
+
+int getSuitableRandomNode(int distance, int nodeA,Graph graph){
+	srand (time(NULL));
+	int attemp = 0;
+	do{
+		attemp =  (int)rand() % (distance+1) + nodeA;
+	}while(graph.existsEdge(nodeA,attemp));
+	return attemp;
 }
 
-pair<unordered_map<int, list<int>>,list<int>> generateNexGraph(pair<unordered_map<int, list<int>>, list<int>> graph, double entropy){
-	srand (time(NULL));
-	
-}
-
-int getRandomViableNode(pair<unordered_map<int, list<int>>, list<int>> graph, bool criteria){
-	srand (time(NULL));
-	unordered_map<int, list<int> nodes = graph->first;
-	list<int> sinks = graph->second;
-	int attempts = 3;
-	int attempA = 0;
-	int sizeAttemp;
-	if(criteria){
-		sizeAttemp = 9999999;
-	}else{
-		sizeAttemp = -99999;
-	}
-	while(attempts > 0){
-		int attemp =  rand() % (sinks.size()-1) + 1;
-		if(!contains(sinks,attemp) && nodes.at(attemp).size() < (nodes.size() - attemp - 1)){
-			if(criteria){
-				if(nodes.at(attemp).size() < sizeAttemp){
-					attempA = attemp;
-					sizeAttemp = nodes.at(attemp).size();
-				}
-			}else{
-				if(nodes.at(attemp).size() > sizeAttemp){
-					attempA = attemp;
-					sizeAttemp = nodes.at(attemp).size();
-				}
+int getSuitableLowestWeightNode(Graph graph, int start, int end){
+	int min = 99999999;
+	for(int i = end; i > start+1; i--){
+		if(graph.adj.find(i) != graph.adj.end()){
+			int aux = graph.adj.at(i).size();
+			if(aux < min){
+				min = i;
 			}
-			attempts--;
 		}
 		
 	}
-	return attempA;
+	return min;
 }
 
-int getRandomViableNodeB(pair<unordered_map<int, list<int>>, list<int>> graph){
-
-}
-
-pair<unordered_map<int, list<int>>, list<int>> addRandomEdges(pair<unordered_map<int, list<int>>, list<int>> graph, int noEdges){
+int getSuitableLowWeightRandomNode(int iterations, Graph graph, bool isSink){
+	int min = 9999999;
+	int aux = 0;
 	srand (time(NULL));
-	while(noEdges > 0){
-		int nodeA  = getRandomViableNode(graph,true);
-		bool sw = true;
-		while(sw){
-			int nodeB = rand() % (nodeA) + (graph.size()-nodeA);
+	for(int i = 0; i < iterations; i++){
+		int attemp =  0;
+		do{
+			attemp =  (int)rand() % graph.weightNode.size() + 1;
+			
+		}while(contains(graph.sinks, attemp) == isSink);
+
+		if(graph.getWeightOUT(attemp) < min){
+			aux = attemp;
+			min = graph.getWeightOUT(attemp);
 		}
 	}
-
 	
-}*/
+	return aux;
+}
+
+int getSuitableLowWeightRandomNodeB(int iterations, Graph graph, int start, int distance){
+	int min = 9999999;
+	int aux = 0;
+	srand (time(NULL));
+	for(int i = 0; i < iterations; i++){
+		int attemp = 0;
+		do{
+			attemp =  (int)rand() % (distance) + start+1;
+		}while(graph.existsEdge(start,attemp));
+		if(graph.getWeightIN(attemp) < min){
+			aux = attemp;
+			min = graph.getWeightIN(attemp);
+		}
+	}
+	return aux;
+}
+
+void addRandomEdges(Graph graph, int noEdges, int distance, bool random){
+	srand (time(NULL));
+	for(int i = 0; i < noEdges; i++){
+		
+		int nodeA = getSuitableLowWeightRandomNode(10, graph , true);
+		
+		int nodeB = 0;
+		if(random){
+			nodeB = getSuitableRandomNode(5, nodeA, graph);
+		}else{
+			nodeB = getSuitableLowWeightRandomNodeB(5,graph,nodeA,graph.weightNode.size()-nodeA);
+		}
+		graph.addEdge(nodeA,nodeB);
+		cout << nodeA << " --> " << nodeB << endl;
+	}
+}
+
+
+void generateNextGraph(Graph min, int noEdges, int distance, bool random){
+	addRandomEdges(min, noEdges,distance, random);
+}
+
+
 
 int main(int argv, char* argc[]){
 	string PATH("");
@@ -208,8 +233,12 @@ int main(int argv, char* argc[]){
 		//list<list<int>> algo;
 		list<int> sinks;
 		sinks.push_back(4);
-		sinks.push_back(6);
-		printGraph(generateMinGraph(1000,sinks).adj);
+		sinks.push_back(10);
+		Graph g = generateMinGraph(30,sinks);
+		printGraph(g.adj);
+		cout << "------------------------" << endl;
+		generateNextGraph(g,5,6,true);
+		printGraph(g.adj);
 		//cout << "usage : generator <directory name> <number of graphs> <number of nodes>" << endl;
 	}
 }
