@@ -16,6 +16,16 @@ bool contains(list<int> L, int element){
 	return find(L.begin(), L.end(), element) != L.end();
 }
 
+struct conf {
+	int n;
+	pair <int, int> noNodes;
+	pair <int, int> sinks;
+	pair <int, int> noEdges;
+	pair <int, int> distance;
+	bool allDiferents;
+	string nameFile;
+};
+
 
 class Graph {
   public:
@@ -69,20 +79,16 @@ class Graph {
 };
 
 
-void createFile(string name){
-	ofstream outfile (name);
-	outfile << "something here" << endl;
-	outfile.close();
-}
-
 void replaceElement(string& original, int pos, string newVal){
 	original = original.substr(0,pos) + newVal + original.substr(pos+1);
 }
 
 string getZerosRow(int noNodes){
+	
 	string line("");
 	for (int i = 0; i < noNodes; i++){
-		if(i == noNodes){
+		if(i == noNodes-1){
+			//cout << "si llego" << endl;
 			line.append("0");
 		}else{
 			line.append("0 ");
@@ -91,11 +97,22 @@ string getZerosRow(int noNodes){
 	return line;
 }
 
-void formatFile(unordered_map<int, list<int>> graph, int noNodes){
+void formatFile(unordered_map<int, list<int>> graph, int noNodes, list<int> sinks, ofstream& out){
 	
 	//cout << line << endl;
 	//cout << replaceElement(line,(-1)*2,"1") << endl;
-	cout << "noNodes " << noNodes << endl; 
+
+	out << "Nodos: " << noNodes << endl; 
+	list<int> :: iterator sink;
+	for (sink = sinks.begin(); sink != sinks.end(); ++sink){
+		if(*sink != noNodes){
+			out << *sink << " ";
+		}else{
+			out << *sink;
+		}
+		
+	}
+	out << endl;
 	for (int i = 1; i <= noNodes; i++){
 		string line = getZerosRow(noNodes);
 		if(graph.find(i) !=  graph.end()){
@@ -105,8 +122,15 @@ void formatFile(unordered_map<int, list<int>> graph, int noNodes){
 				replaceElement(line, (*nodesIt-1)*2,"1");
 			}
 		} 
-		cout << i << " " <<line << endl;
+		out <<line << endl;
 	}
+}
+
+void createFile(string name, unordered_map<int, list<int>> graph, int noNodes, list<int> sinks){
+	ofstream outfile ("../graphs/"+name);
+	formatFile(graph,noNodes,sinks,outfile);
+	outfile.close();
+	cout << "file succesfully written file : " << name << endl;
 }
 
 void printGraph(unordered_map<int, list<int>> graph){
@@ -206,6 +230,32 @@ int getSuitableLowWeightRandomNodeB(int iterations, Graph graph, int start, int 
 	return aux;
 }
 
+void removeRandomEdges(int n, int a, int b, Graph& graph,int iterations){
+	while(n>0){
+		int node = 0;
+		int nodeWeight = -999999;
+		for(int i = 0; i < iterations; i++){
+			int new_node = (int)(rand() % (b + 1 - a)) + a;
+			if(graph.getWeightOUT(new_node) > nodeWeight && !contains(graph.sinks,new_node)){
+				node = new_node;
+				nodeWeight = graph.getWeightOUT(new_node);
+			}
+		}
+		list<int> :: iterator adj_node;
+		int nodeB = 0;
+		int nodeBWeight = -99999;
+		for(adj_node = graph.adj.at(node).begin(); adj_node != graph.adj.at(node).end(); ++adj_node){
+			if(graph.getWeightIN(*adj_node) > nodeBWeight){
+				nodeB = *adj_node;
+				nodeBWeight = graph.getWeightIN(*adj_node);
+			}
+		}
+		graph.removeEdge(node, nodeB);
+		cout << "removed " << node << " -> " << nodeB << endl;
+		n--;
+	}
+}
+
 void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 	//srand (time(NULL));
 	for(int i = 0; i < noEdges; i++){
@@ -219,7 +269,7 @@ void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 			nodeB = getSuitableLowWeightRandomNodeB(5,graph,nodeA,graph.weightNode.size()-nodeA);
 		}
 		graph.addEdge(nodeA,nodeB);
-		cout << nodeA << " --> " << nodeB << endl;
+		cout <<  "added " << nodeA << " -> " << nodeB << endl;
 	}
 	//return graph;
 }
@@ -227,9 +277,77 @@ void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 
 void generateNextGraph(Graph& min, int noEdges, int distance, bool random){
 	addRandomEdges(min, noEdges,distance, random);
+	removeRandomEdges(5, 1,noEdges-2,min,7);
 	cout << "helolo" << endl;
 }
 
+list<int> getRandomDifferentNumbers(int n, int a, int b){
+	list<int> numbers;
+	while(n > 0){
+		int new_number = (int)(rand() % (b + 1 - a)) + a;
+		if(!contains(numbers,new_number)){
+			numbers.push_back(new_number);
+			n--;
+		}
+	}
+	return numbers;
+}
+
+void readConfigurationFile(struct conf){
+
+	string line;
+    ifstream myfile ("conf/generator.conf");
+    if (myfile.is_open()){
+       	while ( getline (myfile,line) ){
+       		string parameter = line.substr(0,line.find("="));
+			switch (parameter) {
+        		case "n": 
+        			conf.n = stoi(line.substr(line.find("=")+1));
+        			cout << "n " << conf.n << endl;
+        			break;
+        		case "noNodes":
+        			conf.noNodes.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+        			conf.noNodes.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+        			cout << "noNodes {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
+        			break;
+        		case "sinks";
+        			conf.sinks.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+        			conf.sinks.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+        			cout << "sinks {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
+        			break;
+        		case "noEdges":
+        			conf.noEdges.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+        			conf.noEdges.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+        			cout << "noEdges {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
+        			break;
+        		case "distance";
+        			conf.distance.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+        			conf.distance.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+        			cout << "distnace {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
+        			break;
+        		case "nameFile":
+        			conf.nameFile = line.substr(line.find("=")+1);
+        			cout << "nameFile " << conf.nameFile << endl; 
+        			break;
+        		case "allDiferents";
+        			if(line.substr(line.find("=")+1) == "true"){
+        				conf.allDiferents = true;
+        			}else if(line.substr(line.find("=")+1) == "false"){
+        				conf.allDiferents = false;
+        			}
+        			cout << "allDiferents " << conf.allDiferents << endl; 
+        			break;
+        	}
+    	}
+      	myfile.close();
+    }
+    else cout << "Unable to open file"; 
+}
+
+
+void graphsGenerator(int n, int noNodes ){
+
+}
 
 
 int main(int argv, char* argc[]){
@@ -244,18 +362,19 @@ int main(int argv, char* argc[]){
 		//cout << "looking good" << endl;
 	}else {
 		//list<list<int>> algo;
-		srand (time(NULL));
-		list<int> sinks;
-		sinks.push_back(4);
-		sinks.push_back(10);
-		Graph g = generateMinGraph(30,sinks);
+		/*srand (time(NULL));
+		list<int> sinks = getRandomDifferentNumbers(3,25,49);
+		Graph g = generateMinGraph(50,sinks);
 		//printGraph(g.adj);
 		//cout << "------------------------" << endl;
-		generateNextGraph(g,5,6,true);
+		generateNextGraph(g,80,8,true);
 		//cout << "------------------------" << endl;
 		printGraph(g.adj);
 		cout << "--------------------------" << endl;
-		formatFile(g.adj, g.weightNode.size());
+		createFile("prueba1" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);*/
+
+		readConfigurationFile(conf);
+
 		//cout << "usage : generator <directory name> <number of graphs> <number of nodes>" << endl;
 	}
 }
