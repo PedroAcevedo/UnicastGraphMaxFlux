@@ -75,7 +75,15 @@ class Graph {
     		weightNode[b] = weightB-1;
     	}
     }
-
+    
+    float averageWeight(){
+        float sum = 0;
+        for(int i = 1; i <= weightNode.size(); i++){
+            sum += (float)getWeightOUT(i);
+        }
+        return sum/((float)weighNode.size());
+    }
+    
     
 };
 
@@ -344,8 +352,8 @@ void readConfigurationFile(conf& configuration){
 void graphsGenerator(conf configuration){
 	srand (time(NULL));
 	if(!configuration.allDiferents){
-		/*int noSinks = (int)(rand() % (configuration.sinks.second - configuration.sinks.first)) + configuration.sinks.first;
-		int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.sinks.first;
+		int noSinks = (int)(rand() % (configuration.sinks.second - configuration.sinks.first)) + configuration.sinks.first;
+		int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.noNodes.first;
 		list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
 		Graph g = generateMinGraph(,sinks);
 		int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
@@ -356,9 +364,9 @@ void graphsGenerator(conf configuration){
 		for(int i = 2; i <= configuration.n; i++){
 			noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 			distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
-			generateNextGraph()
-
-		}*/ 
+			generateNextGraph(g,noEdges,noEdges,distance,true);
+            createFile(configuration.nameFile + to_string(i) + "_" + to_string(g.weightNode.size()) + "_" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);
+		} 
 
 	}else{
 		for(int i = 1; i <= configuration.n; i++){
