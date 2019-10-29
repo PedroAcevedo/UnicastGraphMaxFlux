@@ -8,6 +8,7 @@
 #include <utility>
 #include <stdlib.h>
 #include <time.h>     
+#include <math.h>
 //#define PATH "../graphs/"
 
 using namespace std;
@@ -171,7 +172,7 @@ Graph generateMinGraph(int noNodes, list<int> sinks){
 int getSuitableRandomNode(int distance, int nodeA,Graph graph){
 	//srand (time(NULL));
 	int noNodes = graph.weightNode.size();
-	int weight = graph.getWeightOUT(nodeA);
+	//int weight = graph.getWeightOUT(nodeA);
 	int attemp = 0;
 	do{
 		attemp =  (int)rand() % (distance) + nodeA+1;
@@ -251,7 +252,7 @@ void removeRandomEdges(int n, int a, int b, Graph& graph,int iterations){
 			}
 		}
 		graph.removeEdge(node, nodeB);
-		cout << "removed " << node << " -> " << nodeB << endl;
+		//cout << "removed " << node << " -> " << nodeB << endl;
 		n--;
 	}
 }
@@ -269,16 +270,17 @@ void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 			nodeB = getSuitableLowWeightRandomNodeB(5,graph,nodeA,graph.weightNode.size()-nodeA);
 		}
 		graph.addEdge(nodeA,nodeB);
-		cout <<  "added " << nodeA << " -> " << nodeB << endl;
+		//cout <<  "added " << nodeA << " -> " << nodeB << endl;
 	}
 	//return graph;
 }
 
 
-void generateNextGraph(Graph& min, int noEdges, int distance, bool random){
-	addRandomEdges(min, noEdges,distance, random);
-	removeRandomEdges(5, 1,noEdges-2,min,7);
-	cout << "helolo" << endl;
+void generateNextGraph(Graph& min, int noEdgesADD, int noEdgesRM, int distance, bool random){
+	addRandomEdges(min, round((double)(noEdgesADD/2)),distance, random);
+	removeRandomEdges(noEdgesRM,(int)(rand()%(5)+1),(int)(rand()%(3) + min.weightNode.size()-5),min,(int)(rand()%(12-6)+6));
+	addRandomEdges(min, round((double)(noEdgesADD/2)),distance, random);
+	//cout << "helolo" << endl;
 }
 
 list<int> getRandomDifferentNumbers(int n, int a, int b){
@@ -293,51 +295,45 @@ list<int> getRandomDifferentNumbers(int n, int a, int b){
 	return numbers;
 }
 
-void readConfigurationFile(struct conf){
+void readConfigurationFile(conf& configuration){
 
 	string line;
     ifstream myfile ("conf/generator.conf");
     if (myfile.is_open()){
+    	cout << "generator configuration [conf/generator.conf]" << endl;
        	while ( getline (myfile,line) ){
        		string parameter = line.substr(0,line.find("="));
-			switch (parameter) {
-        		case "n": 
-        			conf.n = stoi(line.substr(line.find("=")+1));
-        			cout << "n " << conf.n << endl;
-        			break;
-        		case "noNodes":
-        			conf.noNodes.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
-        			conf.noNodes.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
-        			cout << "noNodes {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
-        			break;
-        		case "sinks";
-        			conf.sinks.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
-        			conf.sinks.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
-        			cout << "sinks {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
-        			break;
-        		case "noEdges":
-        			conf.noEdges.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
-        			conf.noEdges.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
-        			cout << "noEdges {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
-        			break;
-        		case "distance";
-        			conf.distance.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
-        			conf.distance.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
-        			cout << "distnace {" << conf.noNodes.first << ", " << conf.noNodes.second << "}" << endl;
-        			break;
-        		case "nameFile":
-        			conf.nameFile = line.substr(line.find("=")+1);
-        			cout << "nameFile " << conf.nameFile << endl; 
-        			break;
-        		case "allDiferents";
-        			if(line.substr(line.find("=")+1) == "true"){
-        				conf.allDiferents = true;
-        			}else if(line.substr(line.find("=")+1) == "false"){
-        				conf.allDiferents = false;
-        			}
-        			cout << "allDiferents " << conf.allDiferents << endl; 
-        			break;
-        	}
+				
+    		if(parameter == "n"){
+    			configuration.n = stoi(line.substr(line.find("=")+1));
+    			cout << "n = " << configuration.n << endl;
+    		}else if(parameter == "noNodes"){
+    			configuration.noNodes.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+    			configuration.noNodes.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+    			cout << "noNodes = {" << configuration.noNodes.first << ", " << configuration.noNodes.second << "}" << endl;
+    		}else if(parameter == "sinks"){
+    			configuration.sinks.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+    			configuration.sinks.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+    			cout << "sinks = {" << configuration.sinks.first << ", " << configuration.sinks.second << "}" << endl;
+    		}else if(parameter == "noEdges"){
+    			configuration.noEdges.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+    			configuration.noEdges.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+    			cout << "noEdges = {" << configuration.noEdges.first << ", " << configuration.noEdges.second << "}" << endl;
+    		}else if(parameter == "distance"){
+    			configuration.distance.first = stoi(line.substr(line.find("{")+1,line.find(",")-line.find("{")-1));
+    			configuration.distance.second = stoi(line.substr(line.find(",")+1,line.find("}")-line.find(",")-1));
+    			cout << "distance = {" << configuration.distance.first << ", " << configuration.distance.second << "}" << endl;
+    		}else if(parameter == "nameFile"){
+    			configuration.nameFile = line.substr(line.find("=")+1);
+    			cout << "nameFile = " << configuration.nameFile << endl; 
+    		}else if(parameter == "allDiferents"){
+    			if(line.substr(line.find("=")+1) == "true"){
+    				configuration.allDiferents = true;
+    			}else if(line.substr(line.find("=")+1) == "false"){
+    				configuration.allDiferents = false;
+    			}
+    			cout << "allDiferents = " << configuration.allDiferents << endl; 
+    		}	
     	}
       	myfile.close();
     }
@@ -345,37 +341,52 @@ void readConfigurationFile(struct conf){
 }
 
 
-void graphsGenerator(int n, int noNodes ){
+void graphsGenerator(conf configuration){
+	srand (time(NULL));
+	if(!configuration.allDiferents){
+		/*int noSinks = (int)(rand() % (configuration.sinks.second - configuration.sinks.first)) + configuration.sinks.first;
+		int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.sinks.first;
+		list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
+		Graph g = generateMinGraph(,sinks);
+		int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
+		int distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
+		int extraEdges = (int)(rand() % (20-10)) + 10;
+		generateNextGraph(g, noEdges + extraEdges,extraEdges, distance,true);
+		createFile(configuration.nameFile + "1" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);
+		for(int i = 2; i <= configuration.n; i++){
+			noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
+			distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
+			generateNextGraph()
 
+		}*/ 
+
+	}else{
+		for(int i = 1; i <= configuration.n; i++){
+			int noSinks = (int)(rand() % (configuration.sinks.second - configuration.sinks.first)) + configuration.sinks.first;
+			int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.noNodes.first;
+			//cout << "noNodes " << noNodes << " noSinks " << noSinks << endl;
+			list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
+			Graph g = generateMinGraph(noNodes,sinks);
+			int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
+			int distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
+			int extraEdges = (int)(rand() % (20-10)) + 10;
+			//cout << "noEdges " << noEdges << " distance " << distance << " extra "<< extraEdges << endl;
+			generateNextGraph(g, noEdges + extraEdges,extraEdges, distance,true);
+			createFile(configuration.nameFile + to_string(i) + "_" + to_string(g.weightNode.size()) + "_" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);
+		}
+	}
 }
 
 
 int main(int argv, char* argc[]){
 	string PATH("");
 	unordered_map<int, list<int>> adj; 
-	if(argv > 3){
-		string directoryName = argc[1];
-		int noGraphs = stoi(argc[2]);
-		int noNodes = stoi(argc[3]);
-		//cout << "directory name: " + directoryName  + " number of graphs: " + noGraphs + " number of nodes: " + noNodes << endl;
-		//createFile(PATH.append(fileName));
-		//cout << "looking good" << endl;
+	if(argv > 1){
+		cout << "no need arguments..." << endl;
 	}else {
-		//list<list<int>> algo;
-		/*srand (time(NULL));
-		list<int> sinks = getRandomDifferentNumbers(3,25,49);
-		Graph g = generateMinGraph(50,sinks);
-		//printGraph(g.adj);
-		//cout << "------------------------" << endl;
-		generateNextGraph(g,80,8,true);
-		//cout << "------------------------" << endl;
-		printGraph(g.adj);
-		cout << "--------------------------" << endl;
-		createFile("prueba1" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);*/
-
-		readConfigurationFile(conf);
-
-		//cout << "usage : generator <directory name> <number of graphs> <number of nodes>" << endl;
+		struct conf configuration;
+		readConfigurationFile(configuration);
+		graphsGenerator(configuration);		
 	}
 }
 
