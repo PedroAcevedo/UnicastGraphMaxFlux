@@ -33,14 +33,14 @@ tr:nth-child(even) {
     <th>Is NC valid?</th>
     <th>Is equal?</th>
   </tr>"
-for g in {1..1}
+for g in {1..5}
 do
 	selected=$(echo ${grafos[$g]}| sed 's/[1-9]des//g')
 	number=$(echo ${grafos[$g]} | tail -c 5 | sed 's/des//g')
 	echo '<tr><th>' ${grafos[$g]} '</th>'
 	rutasdest=( 0 0 )
 	ind=0
-	for algorithm in a_proyecto_final a_proyecto_final2
+	for algorithm in ff_rutasDisyuntas42 ff_rutasDisyuntas42_p
 	do	
 		cd ..
 		{ echo $selected; echo $number; }|/usr/local/MATLAB/R2018b/bin/matlab -nodesktop -nosplash -nojvm -r $algorithm > Results.txt

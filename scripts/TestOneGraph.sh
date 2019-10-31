@@ -4,7 +4,7 @@ grafos=($( ls graphs/ |	sort -V | sed -e 's/\..*$//'))
 selected=$(echo ${grafos[$1]}| sed 's/[1-9]des//g')
 number=$(echo ${grafos[$1]} | tail -c 5 | sed 's/des//g')
 echo ${grafos[$1]}
-{ echo $selected; echo $number; }|/usr/local/MATLAB/R2018b/bin/matlab -nodesktop -nosplash -r a_proyecto_final2 > Results.txt
+{ echo $selected; echo $number; }|/usr/local/MATLAB/R2018b/bin/matlab -nodesktop -nosplash -r ff_rutasDisyuntas42_p > Results.txt
 #Retrieve execution time
 rutadest=$(cat Results.txt | awk '/^#/')
 echo $rutadest

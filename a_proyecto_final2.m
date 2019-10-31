@@ -58,8 +58,7 @@ clc;
 clear all;
 close all;
 [C, dest] = ff_leerGrafo();
-tic
-ff_grafo(C,dest,[3 5]);
+%ff_grafo(C,dest,[3 5]);
 nn = length(C);
 ndest = length(dest);
 flumaxrut = [];
@@ -75,6 +74,7 @@ end
 matpredsus = a_calcular_predecesor_sucesor(C, matpredsus, 1, 1, 0);
 [max_d, nn] = size(matpredsus);
 matpredsus = a_expansion_rutas(matpredsus, nn, max_d);
+tic
 for nd = 1:ndest
     rutas = a_obtener_rutas(matpredsus(:,dest(nd)), max_d);
     fprintf('%s%2.0f\n','Todas las rutas que llegan a ', dest(nd));
@@ -91,7 +91,7 @@ for nd = 1:ndest
     end
     flumaxrut = [flumaxrut length(disjoints)];
 end
-
+toc
 for i=1:length(rutasdest)
     g = zeros(1,length(rutasdest(1).rutamax));
     for j=1:length(rutasdest(i).rutamax)
@@ -349,7 +349,6 @@ while swseguir
 %         ff_grafo(minmaxflujo,dest,nodos_cod);
     end
 end
-toc
 %Escritura de la matriz de  flujo máximo total (grafo de  flujo máximo
 %general)
 fprintf('Grafo General de Flujo Maximo por Arco:\n');

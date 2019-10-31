@@ -37,7 +37,6 @@ clear all
 %            As� colisiones(i) = k significa que k rutas pasan por el nodo
 %            i.
 %            Tama�o: destino -1
-tic                  
 [C, dest]=ff_leerGrafo();
 %ff_grafo(C,dest,[]);
 nn=length(C);
@@ -47,31 +46,14 @@ segnodtot=find(C(1,:)==1);
 contsegnod(1:(length(segnodtot)))=0;
 maxflujo=zeros(ndest,nn,nn);
 rutaseg = struct('nodo',[]);
+tic
 for nd = 1:ndest
     rutas=ff_todas_las_rutas4(1,dest(nd),C);
-    % Agregadas para prueba
-%     fprintf('%s%2.0f\n','Rutas que pasan por cada nodo del grafo rumbo a ',dest(nd));
-%     fprintf('%s','   ');
-%     for jl=1:nn
-%         fprintf('%2.0f',jl);
-%     end
-%     fprintf('\n');
-%     for jl=1:length(rutas)
-%         fprintf('%2.0f ',jl)
-%         for ll=1:nn
-%             if ~isempty(find(rutas(jl).camino==ll))
-%                 fprintf('%s','x,');
-%             else
-%                 fprintf('%s',' ,');
-%             end
-%         end
-%         fprintf('\n');
-%     end
-    fprintf('%s%2.0f\n','Todas las rutas que llegan a ', dest(nd));
-    for jl=1:length(rutas)
-        fprintf('%2.0f %2.0f ',jl,rutas(jl).camino);
-        fprintf('\n');
-    end
+    %fprintf('%s%2.0f\n','Todas las rutas que llegan a ', dest(nd));
+    %for jl=1:length(rutas)
+    %    fprintf('%2.0f %2.0f ',jl,rutas(jl).camino);
+    %    fprintf('\n');
+    %end
     disjoints = Disjoints_routesv3(dest(nd),rutas);
     segnod(nd).lista = [];
     for ii=1:length(disjoints)
@@ -81,7 +63,7 @@ for nd = 1:ndest
     end
     flumaxrut = [flumaxrut length(disjoints)];
 end
-
+toc
 for i=1:length(rutasdest)
     g = zeros(1,length(rutasdest(1).rutamax));
     for j=1:length(rutasdest(i).rutamax)
@@ -375,13 +357,19 @@ while swseguir
         %ff_grafo(minmaxflujo,dest,nodos_cod);
     end
 end
-toc
-%Escritura de la matriz de  flujo m�ximo total (grafo de  flujo m�ximo
+
+%Escritura de la matriz de  flujo máximo total (grafo de  flujo máximo
 %general)
 fprintf('Grafo General de Flujo Maximo por Arco:\n');
 ff_escribirGrafo(minmaxflujo);
-ruta='/home/pedross/Documents/PFiles/';
+
+%Ruta en el PC de escritorio de la oficina
+ruta= strcat(pwd,"/scripts/networkCodingValidator/");
+%Ruta en el portátil de la tesis:
+%ruta='C:\Users\usuario\Downloads\z3-4.5.0z-x86-win\bin\';
+%Ruta para que los archivos queden en Google Drive del portátil
 %ruta='C:\Users\jmarquez\Google Drive\Jmarquez\Doctorado Ing. Sistemas\Tesis\SalidasGrafoUnicast';
+
 file=strcat(ruta,int2str(nn),'_nodes_graph_mf_',int2str(minflujo),'_ff5p.ffm');
 fprintf([int2str(nn) '_nodes_graph_mf_' int2str(minflujo) '_ff5p.ffm']);
 file_fa_min=fopen(file,'w');
@@ -396,6 +384,8 @@ fprintf(file_fa_min,'\n');
 for i=1:nn
     for j=1:nn
         fprintf(file_fa_min,'%d ',minmaxflujo(i,j));
+        %fprintf(file_fa_min,'%d ',minmaxflujo(i,j+1));
+        %fprintf(file_fa_min,'	');
     end
     fprintf(file_fa_min,'\n');
 end

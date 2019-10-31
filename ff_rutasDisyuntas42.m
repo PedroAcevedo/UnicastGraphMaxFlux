@@ -67,11 +67,11 @@ for nd=1:ndest
 %         end
 %         fprintf('\n');
 %     end
-    fprintf('%s%2.0f\n','Todas las rutas que llegan a ', dest(nd));
-    for jl=1:length(rutas)
-        fprintf('%2.0f %2.0f ',jl,rutas(jl).camino);
-        fprintf('\n');
-    end
+    %fprintf('%s%2.0f\n','Todas las rutas que llegan a ', dest(nd));
+    %for jl=1:length(rutas)
+    %    fprintf('%2.0f %2.0f ',jl,rutas(jl).camino);
+    %    fprintf('\n');
+    %end
     % Fin agregadas para prueba
     
     posi=zeros(length(rutas),nn);  
@@ -218,6 +218,15 @@ for nd=1:ndest
     clear marca;
 end
 toc
+for i=1:length(rutasdest)
+    g = zeros(1,length(rutasdest(1).rutamax));
+    for j=1:length(rutasdest(i).rutamax)
+        g(j) = rutasdest(i).rutamax(j).numruta;
+    end
+    g = sort(g);
+    disp(['#' mat2str(g)])
+end
+
 % Agregado para verificar si de verdad est� tomando los caminos m�s cortos
 %
 %  for x=1:length(rutasdest)
@@ -470,24 +479,20 @@ end
 %     end
 % end
 
-%Escritura de la matriz de  flujo m�ximo total (grafo de  flujo m�ximo
+%Escritura de la matriz de  flujo máximo total (grafo de  flujo máximo
 %general)
 fprintf('Grafo General de Flujo Maximo por Arco:\n');
 ff_escribirGrafo(minmaxflujo);
 
-for i=1:length(rutasdest)
-    g = zeros(1,length(rutasdest(1).rutamax));
-    for j=1:length(rutasdest(i).rutamax)
-        g(j) = rutasdest(i).rutamax(j).numruta;
-    end
-    g = sort(g);
-    disp(['#' mat2str(g)])
-end
-
-ruta='/home/pedross/Documents/PFiles/';
+%Ruta en el PC de escritorio de la oficina
+ruta= strcat(pwd,"/scripts/networkCodingValidator/");
+%Ruta en el portátil de la tesis:
+%ruta='C:\Users\usuario\Downloads\z3-4.5.0z-x86-win\bin\';
+%Ruta para que los archivos queden en Google Drive del portátil
 %ruta='C:\Users\jmarquez\Google Drive\Jmarquez\Doctorado Ing. Sistemas\Tesis\SalidasGrafoUnicast';
-file=strcat(ruta,int2str(nn),'_nodes_graph_mf_',int2str(minflujo),'_ff5m.ffm');
-fprintf([int2str(nn) '_nodes_graph_mf_' int2str(minflujo) '_ff5m.ffm']);
+
+file=strcat(ruta,int2str(nn),'_nodes_graph_mf_',int2str(minflujo),'_ff5p.ffm');
+fprintf([int2str(nn) '_nodes_graph_mf_' int2str(minflujo) '_ff5p.ffm']);
 file_fa_min=fopen(file,'w');
 fprintf(file_fa_min,'%d ',nn);
 fprintf(file_fa_min,'%d ',minflujo);
@@ -500,6 +505,8 @@ fprintf(file_fa_min,'\n');
 for i=1:nn
     for j=1:nn
         fprintf(file_fa_min,'%d ',minmaxflujo(i,j));
+        %fprintf(file_fa_min,'%d ',minmaxflujo(i,j+1));
+        %fprintf(file_fa_min,'	');
     end
     fprintf(file_fa_min,'\n');
 end
