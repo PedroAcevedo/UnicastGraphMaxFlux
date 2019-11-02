@@ -321,18 +321,18 @@ end
 % Creaci�n del grafo de flujo (maxflujo) m�ximo para cada nodo, despliegue
 % de todas las rutas y del grafo de cada nodo sumidero.
 for nd=1:ndest
-   fprintf('%s %2.0f\n','Rutas v�lidas para ', dest(nd));
+   %fprintf('%s %2.0f\n','Rutas v�lidas para ', dest(nd));
    for ii=1:length(rutasdest(nd).rutamax)
-       fprintf('%2.0f ',rutasdest(nd).rutamax(ii).numruta);
-       fprintf('%2.0f ',rutasdest(nd).rutamax(ii).camino);
-       fprintf('\n');
+       %fprintf('%2.0f ',rutasdest(nd).rutamax(ii).numruta);
+       %fprintf('%2.0f ',rutasdest(nd).rutamax(ii).camino);
+       %fprintf('\n');
        for jj=1:length(rutasdest(nd).rutamax(ii).camino) - 1
            maxflujo(nd,rutasdest(nd).rutamax(ii).camino(jj),rutasdest(nd).rutamax(ii).camino(jj+1))=1;
        end
    end   
    mflujo=reshape(maxflujo(nd,:,:),[nn,nn]);
-   fprintf('%s %2.0f\n','Flujo Maximo por Arco para : ',dest(nd));
-   ff_escribirGrafo(mflujo);
+   %fprintf('%s %2.0f\n','Flujo Maximo por Arco para : ',dest(nd));
+   %ff_escribirGrafo(mflujo);
    %ff_grafo(mflujo,dest(nd),[]);
 end
 %C�lculo de los nodos de codificaci�n en el grafo general de flujo m�ximo. 

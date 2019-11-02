@@ -441,17 +441,17 @@ end
 % Creaci�n del grafo de flujo (maxflujo) m�ximo para cada nodo, despliegue
 % de todas las rutas y del grafo de cada nodo sumidero.
 for nd=1:ndest
-   fprintf('%s %2.0f\n','Rutas v�lidas para ', dest(nd));
+   %fprintf('%s %2.0f\n','Rutas v�lidas para ', dest(nd));
    for ii=1:length(rutasdest(nd).rutamax)
-       fprintf('%2.0f ',rutasdest(nd).rutamax(ii).numruta);
-       fprintf('%2.0f ',rutasdest(nd).rutamax(ii).camino);
-       fprintf('\n');
+       %fprintf('%2.0f ',rutasdest(nd).rutamax(ii).numruta);
+       %fprintf('%2.0f ',rutasdest(nd).rutamax(ii).camino);
+       %fprintf('\n');
        for jj=1:length(rutasdest(nd).rutamax(ii).camino) - 1
            maxflujo(nd,rutasdest(nd).rutamax(ii).camino(jj),rutasdest(nd).rutamax(ii).camino(jj+1))=1;
        end
    end   
    mflujo=reshape(maxflujo(nd,:,:),[nn,nn]);
-   fprintf('%s %2.0f\n','Flujo Maximo por Arco para : ',dest(nd));
+   %fprintf('%s %2.0f\n','Flujo Maximo por Arco para : ',dest(nd));
    ff_escribirGrafo(mflujo);
    %ff_grafo(mflujo,dest(nd),[]);
    %fprintf('Hola mundo');
@@ -481,7 +481,7 @@ end
 
 %Escritura de la matriz de  flujo máximo total (grafo de  flujo máximo
 %general)
-fprintf('Grafo General de Flujo Maximo por Arco:\n');
+%fprintf('Grafo General de Flujo Maximo por Arco:\n');
 ff_escribirGrafo(minmaxflujo);
 
 %Ruta en el PC de escritorio de la oficina
