@@ -81,7 +81,7 @@ class Graph {
         for(int i = 1; i <= weightNode.size(); i++){
             sum += (float)getWeightOUT(i);
         }
-        return sum/((float)weighNode.size());
+        return sum/((float)weightNode.size());
     }
     
     
@@ -265,6 +265,7 @@ void removeRandomEdges(int n, int a, int b, Graph& graph,int iterations){
 	}
 }
 
+
 void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 	//srand (time(NULL));
 	for(int i = 0; i < noEdges; i++){
@@ -301,6 +302,21 @@ list<int> getRandomDifferentNumbers(int n, int a, int b){
 		}
 	}
 	return numbers;
+}
+
+Graph generateCompletelyRandomGraph(int noNodes, list<int> sinks, int distance){
+	Graph randomGraph;
+	randomGraph.sinks = sinks;
+	randomGraph.sinks.push_back(noNodes);
+	randomGraph.weightNode[1] = 0;
+	for(int i = noNodes; i > 1; i--){
+		int nodeA = 0;
+		do{
+			nodeA = (int)(rand() % (min(i-1,distance)) + max(1,i-distance));
+		}while(randomGraph.existsEdge(nodeA,i));
+		randomGraph.addEdge(nodeA,i);
+	}
+	return randomGraph;
 }
 
 void readConfigurationFile(conf& configuration){
@@ -352,21 +368,22 @@ void readConfigurationFile(conf& configuration){
 void graphsGenerator(conf configuration){
 	srand (time(NULL));
 	if(!configuration.allDiferents){
+		cout << "here my friend" << endl;
 		int noSinks = (int)(rand() % (configuration.sinks.second - configuration.sinks.first)) + configuration.sinks.first;
 		int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.noNodes.first;
 		list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
-		Graph g = generateMinGraph(,sinks);
-		int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 		int distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
+		Graph g = generateCompletelyRandomGraph(noNodes,sinks,distance);
+		int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 		int extraEdges = (int)(rand() % (20-10)) + 10;
 		generateNextGraph(g, noEdges + extraEdges,extraEdges, distance,true);
-		createFile(configuration.nameFile + "1" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);
+        createFile(configuration.nameFile + to_string(1) + "_" + to_string(g.weightNode.size()) + "_" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);
 		for(int i = 2; i <= configuration.n; i++){
 			noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 			distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
 			generateNextGraph(g,noEdges,noEdges,distance,true);
             createFile(configuration.nameFile + to_string(i) + "_" + to_string(g.weightNode.size()) + "_" + to_string(g.sinks.size()) + "des.txt",g.adj, g.weightNode.size(), g.sinks);
-		} 
+		}
 
 	}else{
 		for(int i = 1; i <= configuration.n; i++){
@@ -374,9 +391,10 @@ void graphsGenerator(conf configuration){
 			int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.noNodes.first;
 			//cout << "noNodes " << noNodes << " noSinks " << noSinks << endl;
 			list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
-			Graph g = generateMinGraph(noNodes,sinks);
-			int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 			int distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
+			Graph g = generateCompletelyRandomGraph(noNodes,sinks,distance);
+			printGraph(g.adj);
+			int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 			int extraEdges = (int)(rand() % (20-10)) + 10;
 			//cout << "noEdges " << noEdges << " distance " << distance << " extra "<< extraEdges << endl;
 			generateNextGraph(g, noEdges + extraEdges,extraEdges, distance,true);
