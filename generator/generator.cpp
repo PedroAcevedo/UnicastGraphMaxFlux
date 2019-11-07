@@ -309,6 +309,7 @@ void generateNextGraph(Graph& min, int noEdgesADD, int noEdgesRM, int distance, 
 			min.addEdge(aux,*sink);
 			noExtras++;
 		}
+            
 	}
 	//cout << "por aqui presidente " << endl;
 	for(int i= 1; i < min.weightNode.size();i++){
@@ -405,7 +406,7 @@ void readConfigurationFile(conf& configuration){
 void graphsGenerator(conf configuration){
 	srand (time(NULL));
 	if(!configuration.allDiferents){
-		cout << "here my friend" << endl;
+		//cout << "here my friend" << endl;
 		int noSinks = (int)(rand() % (configuration.sinks.second - configuration.sinks.first)) + configuration.sinks.first;
 		int noNodes = (int)(rand() % (configuration.noNodes.second - configuration.noNodes.first)) + configuration.noNodes.first;
 		list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
