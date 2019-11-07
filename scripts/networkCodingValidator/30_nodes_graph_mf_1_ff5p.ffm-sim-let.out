@@ -1,0 +1,18 @@
+0-3	  V1lidos
+ 	 
+A	1
+1
+1
+1
+1
+	ok	17,16,26,18,29
+
+Ordenamiento topolF3gico usado: 
+0 3 7 11 15 19 22 27 29 20 23 26 18 16 17 
+
+ProporciF3n v1lidas: 1/1 = 1.000
+
+Mejor soluciF3n encontrada :
+A	, y es F3ptima
+
+Tiempo de ejecuciF3n total : 0.000255000000000
