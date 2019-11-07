@@ -1,0 +1,20 @@
+0-4	  V1lidos
+ 	 
+A	1
+1
+1
+1
+1
+1
+1
+	ok	30,34,31,36,39,44,49
+
+Ordenamiento topolF3gico usado: 
+0 4 7 14 20 29 39 49 32 35 44 6 12 22 30 5 15 25 34 33 36 31 
+
+ProporciF3n v1lidas: 1/1 = 1.000
+
+Mejor soluciF3n encontrada :
+A	, y es F3ptima
+
+Tiempo de ejecuciF3n total : 0.000687000000000

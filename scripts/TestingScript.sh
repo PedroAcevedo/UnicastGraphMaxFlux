@@ -33,10 +33,10 @@ tr:nth-child(even) {
     <th>Is NC valid?</th>
     <th>Is equal?</th>
   </tr>"
-for g in {1..5}
+for g in {52..101}
 do
 	selected=$(echo ${grafos[$g]}| sed 's/[1-9]des//g')
-	number=$(echo ${grafos[$g]} | sed 's/[a-z]*[0-9]*_//g' | sed 's/des//g')
+	number=$(echo ${grafos[$g]} | sed 's/[a-z]*[A-Z]*[0-9]*_//g; s/des//g')
 	echo '<tr><th>' ${grafos[$g]} '</th>'
 	rutasdest=( 0 0 )
 	ind=0
