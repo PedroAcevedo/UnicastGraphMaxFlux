@@ -290,7 +290,7 @@ void generateNextGraph(Graph& min, int noEdgesADD, int noEdgesRM, int distance, 
 	removeRandomEdges(noEdgesRM,(int)(rand()%(5)+1),(int)(rand()%(3) + min.weightNode.size()-5),min,(int)(rand()%(12-6)+6));
 	addRandomEdges(min, round((double)(noEdgesADD/2))-round(min.sinks.size()/2),distance, random);
 	list<int> :: iterator sink;
-	cout << "por aqui governador " << endl;
+	//cout << "por aqui governador " << endl;
 	for(sink = min.sinks.begin(); sink != min.sinks.end();++sink){
 		int noExtras = min.getWeightIN(*sink);
 		while(noExtras < 2){
@@ -310,12 +310,12 @@ void generateNextGraph(Graph& min, int noEdgesADD, int noEdgesRM, int distance, 
 			noExtras++;
 		}
 	}
-	cout << "por aqui presidente " << endl;
+	//cout << "por aqui presidente " << endl;
 	for(int i= 1; i < min.weightNode.size();i++){
 		if(min.getWeightOUT(i) == 0 && !contains(min.sinks, i)){
 			int nodeB = 0;
 			do{
-				cout << "distance "  << distance << " i " << i << " rest " << std::min(distance, (int)(min.weightNode.size()-i))-1 << endl;
+				//cout << "distance "  << distance << " i " << i << " rest " << std::min(distance, (int)(min.weightNode.size()-i))-1 << endl;
 				nodeB = (int)(rand()%(max(std::min(distance, (int)(min.weightNode.size()-i))-1,1))) + i + 1;
 			}while(min.existsEdge(i, nodeB) && !contains(min.sinks, nodeB));
 			min.addEdge(i, nodeB);
