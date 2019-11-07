@@ -286,10 +286,47 @@ void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 
 
 void generateNextGraph(Graph& min, int noEdgesADD, int noEdgesRM, int distance, bool random){
-	addRandomEdges(min, round((double)(noEdgesADD/2)),distance, random);
+	addRandomEdges(min, round((double)(noEdgesADD/2))-round(min.sinks.size()/2),distance, random);
 	removeRandomEdges(noEdgesRM,(int)(rand()%(5)+1),(int)(rand()%(3) + min.weightNode.size()-5),min,(int)(rand()%(12-6)+6));
-	addRandomEdges(min, round((double)(noEdgesADD/2)),distance, random);
-	//cout << "helolo" << endl;
+	addRandomEdges(min, round((double)(noEdgesADD/2))-round(min.sinks.size()/2),distance, random);
+	list<int> :: iterator sink;
+	cout << "por aqui governador " << endl;
+	for(sink = min.sinks.begin(); sink != min.sinks.end();++sink){
+		int noExtras = min.getWeightIN(*sink);
+		while(noExtras < 2){
+			int nodeA = 0;
+			int weightA = 99999;
+			int aux = 0;
+			for(int j = 0; j < 5; j++){
+				do{
+					nodeA = (int)(rand() % (std::min(*sink-1,distance)) + max(1,*sink-distance));
+				}while(min.existsEdge(nodeA,*sink) && !contains(min.sinks, nodeA));
+				if(min.getWeightOUT(nodeA) <= weightA){
+					weightA = min.getWeightOUT(nodeA);
+					aux = nodeA;
+				}
+			}
+			min.addEdge(aux,*sink);
+			noExtras++;
+		}
+	}
+	cout << "por aqui presidente " << endl;
+	for(int i= 1; i < min.weightNode.size();i++){
+		if(min.getWeightOUT(i) == 0 && !contains(min.sinks, i)){
+			int nodeB = 0;
+			do{
+				cout << "distance "  << distance << " i " << i << " rest " << std::min(distance, (int)(min.weightNode.size()-i))-1 << endl;
+				nodeB = (int)(rand()%(max(std::min(distance, (int)(min.weightNode.size()-i))-1,1))) + i + 1;
+			}while(min.existsEdge(i, nodeB) && !contains(min.sinks, nodeB));
+			min.addEdge(i, nodeB);
+		}else if(min.getWeightIN(i) == 0 && i != 1){
+			int nodeA = 0;
+			do{
+				nodeA = (int)(rand() % (std::min(i-1,distance)) + max(1,i-distance));
+			}while(!contains(min.sinks, nodeA));
+			min.addEdge(nodeA,i);
+		}
+	}
 }
 
 list<int> getRandomDifferentNumbers(int n, int a, int b){
@@ -393,7 +430,7 @@ void graphsGenerator(conf configuration){
 			list<int> sinks = getRandomDifferentNumbers(noSinks,round((double)(noNodes/2)), noNodes-1);
 			int distance = (int)(rand() % (configuration.distance.second - configuration.distance.first)) + configuration.distance.first;
 			Graph g = generateCompletelyRandomGraph(noNodes,sinks,distance);
-			printGraph(g.adj);
+			//printGraph(g.adj);
 			int noEdges = (int)(rand() % (configuration.noEdges.second - configuration.noEdges.first)) + configuration.noEdges.first;
 			int extraEdges = (int)(rand() % (20-10)) + 10;
 			//cout << "noEdges " << noEdges << " distance " << distance << " extra "<< extraEdges << endl;
