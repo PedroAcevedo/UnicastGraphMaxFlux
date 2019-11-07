@@ -36,7 +36,7 @@ tr:nth-child(even) {
 for g in {1..5}
 do
 	selected=$(echo ${grafos[$g]}| sed 's/[1-9]des//g')
-	number=$(echo ${grafos[$g]} | tail -c 5 | sed 's/des//g')
+	number=$(echo ${grafos[$g]} | sed 's/[a-z]*[0-9]*_//g' | sed 's/des//g')
 	echo '<tr><th>' ${grafos[$g]} '</th>'
 	rutasdest=( 0 0 )
 	ind=0
