@@ -1,140 +1,36 @@
-0-1	0-2	0-3	0-4	  V1lidos
- 	 	 	 	 
-A	A	A	A	01
+0-1	0-2	  V1lidos
+ 	 	 
+A	A	01
 00
 01
 00
 01
-00
-00
 00
 	no	-
-B	A	A	A	01
-10
-01
-10
-01
-10
-00
-00
-	no	16,17,18
-A	B	A	A	10
+B	A	01
 10
 10
 10
 10
+	no	18,19
+A	B	10
 10
-00
-	no	16,17,18
-B	B	A	A	10
-10
-10
-00
-	no	-
-A	A	B	A	10
-10
-10
-10
-10
-10
-11
-10
-	ok	16,17,18,19
-B	A	B	A	10
-10
-10
-11
-10
-	no	19
-A	B	B	A	01
-00
 01
 00
 01
-00
-11
 10
-	no	19
-B	B	B	A	01
-10
-01
-10
-01
-10
-11
-10
-	ok	16,17,18,19
-A	A	A	B	10
+	no	18,19
+B	B	10
 10
 10
-10
-10
-10
-11
-10
-	ok	16,17,18,19
-B	A	A	B	10
-10
-10
-11
-10
-	no	19
-A	B	A	B	01
-00
-01
-00
-01
-00
-11
-10
-	no	19
-B	B	A	B	01
-10
-01
-10
-01
-10
-11
-10
-	ok	16,17,18,19
-A	A	B	B	01
-00
-01
-00
-01
-00
-00
-00
-	no	-
-B	A	B	B	01
-10
-01
-10
-01
-10
-00
-00
-	no	16,17,18
-A	B	B	B	10
-10
-10
-10
-10
-10
-00
-	no	16,17,18
-B	B	B	B	10
-10
-10
-00
 	no	-
 
 Ordenamiento topolF3gico usado: 
-0 4 3 8 12 11 15 2 5 9 14 19 1 7 10 13 18 17 16 
+0 2 8 14 1 7 13 12 17 18 15 19 
 
-ProporciF3n v1lidas: 4/16 = 0.250
+ProporciF3n v1lidas: 0/4 = 0.000
 
 Mejor soluciF3n encontrada :
-A	A	B	A	, y es F3ptima
+B	A	, y no es F3ptima
 
-Tiempo de ejecuciF3n total : 0.000403000000000
+Tiempo de ejecuciF3n total : 0.000104000000000

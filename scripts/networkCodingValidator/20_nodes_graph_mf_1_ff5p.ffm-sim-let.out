@@ -1,0 +1,18 @@
+0-4	  V1lidos
+ 	 
+A	1
+1
+1
+1
+1
+	ok	13,14,11,15,19
+
+Ordenamiento topolF3gico usado: 
+0 4 9 13 8 12 17 19 15 14 11 
+
+ProporciF3n v1lidas: 1/1 = 1.000
+
+Mejor soluciF3n encontrada :
+A	, y es F3ptima
+
+Tiempo de ejecuciF3n total : 0.000184000000000
