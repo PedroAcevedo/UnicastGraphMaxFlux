@@ -1,51 +1,37 @@
-0-1	0-5	  V1lidos
+0-2	0-4	  V1lidos
  	 	 
 A	A	01
 00
+01
 00
-00
-00
-00
-00
-00
-00
+01
 00
 	no	-
 B	A	01
 10
-11
+01
 10
-11
+01
 10
-11
-10
-11
-10
-	ok	16,20,23,15,29
+	ok	25,14,29
 A	B	10
 10
-11
 10
-11
 10
-11
 10
-11
 10
-	ok	16,20,23,15,29
+	ok	25,14,29
 B	B	10
-00
-00
-00
-00
+10
+10
 	no	-
 
 Ordenamiento topolF3gico usado: 
-0 5 7 13 1 6 12 18 24 10 11 16 22 28 29 3 9 14 15 17 23 20 
+0 4 7 12 17 22 19 24 2 5 10 15 20 21 25 14 13 18 23 28 29 
 
 ProporciF3n v1lidas: 2/4 = 0.500
 
 Mejor soluciF3n encontrada :
 B	A	, y es F3ptima
 
-Tiempo de ejecuciF3n total : 0.000385000000000
+Tiempo de ejecuciF3n total : 0.000321000000000
