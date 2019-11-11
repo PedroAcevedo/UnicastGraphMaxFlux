@@ -1,0 +1,62 @@
+0-2	0-3	  V1lidos
+ 	 	 
+A	A	01
+00
+01
+00
+01
+00
+01
+00
+01
+00
+01
+00
+01
+00
+	no	-
+B	A	01
+10
+01
+10
+01
+10
+10
+10
+01
+00
+01
+00
+01
+00
+	no	26,16,19,22
+A	B	10
+10
+10
+10
+10
+10
+01
+10
+10
+10
+10
+	no	26,16,19,22
+B	B	10
+10
+10
+10
+10
+10
+10
+	no	-
+
+Ordenamiento topolF3gico usado: 
+0 3 6 10 15 20 25 30 5 8 11 14 17 2 7 12 16 18 19 22 26 29 23 27 32 34 
+
+ProporciF3n v1lidas: 0/4 = 0.000
+
+Mejor soluciF3n encontrada :
+B	A	, y no es F3ptima
+
+Tiempo de ejecuciF3n total : 0.000406000000000

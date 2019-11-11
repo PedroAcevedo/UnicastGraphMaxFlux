@@ -286,14 +286,15 @@ void addRandomEdges(Graph& graph, int noEdges, int distance, bool random){
 
 
 void generateNextGraph(Graph& min, int noEdgesADD, int noEdgesRM, int distance, bool random){
-	addRandomEdges(min, round((double)(noEdgesADD/2))-round(min.sinks.size()/2),distance, random);
-	removeRandomEdges(noEdgesRM,(int)(rand()%(5)+1),(int)(rand()%(3) + min.weightNode.size()-5),min,(int)(rand()%(12-6)+6));
-	addRandomEdges(min, round((double)(noEdgesADD/2))-round(min.sinks.size()/2),distance, random);
+	addRandomEdges(min,noEdgesADD - noEdgesRM - min.sinks.size(),distance, random);
+	//removeRandomEdges(noEdgesRM,(int)(rand()%(5)+1),(int)(rand()%(3) + min.weightNode.size()-5),min,(int)(rand()%(12-6)+6));
+	//addRandomEdges(min, round((double)(noEdgesADD/2))-round(min.sinks.size()/2),distance, random);
 	list<int> :: iterator sink;
 	//cout << "por aqui governador " << endl;
 	for(sink = min.sinks.begin(); sink != min.sinks.end();++sink){
 		int noExtras = min.getWeightIN(*sink);
-		while(noExtras < 2){
+		int aux = (int)(rand()%(2)+1)+noExtras;
+		while(noExtras <  aux){
 			int nodeA = 0;
 			int weightA = 99999;
 			int aux = 0;
