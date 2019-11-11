@@ -33,7 +33,7 @@ tr:nth-child(even) {
     <th>Is NC valid?</th>
     <th>Is equal?</th>
   </tr>"
-for g in {799..801}
+for g in {802..851}
 do
 	selected=$(echo ${grafos[$g]}| sed 's/[1-9]des//g')
 	number=$(echo ${grafos[$g]} | sed 's/[a-z]*[A-Z]*[0-9]*_//g; s/des//g')
