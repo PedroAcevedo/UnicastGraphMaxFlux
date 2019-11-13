@@ -1,18 +1,20 @@
-0-4	  V1lidos
+0-2	  V1lidos
  	 
 A	1
 1
 1
 1
 1
-	ok	12,20,13,18,21
+1
+1
+	ok	20,12,17,10,16,19,21
 
 Ordenamiento topolF3gico usado: 
-0 4 9 13 7 12 11 15 20 14 18 21 
+0 2 8 14 20 21 16 12 17 19 3 9 10 
 
 ProporciF3n v1lidas: 1/1 = 1.000
 
 Mejor soluciF3n encontrada :
 A	, y es F3ptima
 
-Tiempo de ejecuciF3n total : 0.000191000000000
+Tiempo de ejecuciF3n total : 0.000126000000000

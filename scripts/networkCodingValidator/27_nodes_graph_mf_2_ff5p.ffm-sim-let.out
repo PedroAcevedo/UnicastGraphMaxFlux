@@ -6,32 +6,60 @@ A	A	01
 00
 01
 00
+01
+00
+01
+00
+01
+00
+01
+00
 	no	-
 B	A	01
 10
 01
 10
-01
 10
-	ok	23,17,26
+10
+10
+10
+10
+10
+10
+10
+10
+10
+	ok	22,14,17,12,23,18,26
 A	B	10
 10
 10
 10
+01
 10
+01
 10
-	ok	23,17,26
+01
+10
+01
+10
+01
+10
+	ok	22,14,17,12,23,18,26
 B	B	10
+10
+10
+10
+10
 10
 10
 	no	-
 
 Ordenamiento topolF3gico usado: 
-0 5 11 8 14 20 4 10 16 22 26 17 7 13 19 23 
+0 5 9 6 4 8 12 10 16 20 15 21 25 14 17 22 26 7 13 18 19 23 
 
 ProporciF3n v1lidas: 2/4 = 0.500
 
 Mejor soluciF3n encontrada :
 B	A	, y es F3ptima
 
-Tiempo de ejecuciF3n total : 0.000132000000000
+Tiempo de ejecuciF3n total : 0.000318000000000
