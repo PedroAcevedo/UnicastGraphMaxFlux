@@ -24,6 +24,24 @@ Prueba con un solo grafo por parametro, algoritmo propuesto.
 ```
 sudo ./TestOneGraph.sh 1
 ```
+Archivo de configuracion para el generador de grafos: generator/conf/generator.conf
+
+Compilar el generador(usando GCC):
+ 
+```
+g++ -g -Wall -o generator generator.cpp
+```
+Tambien se puede compilar con Make:
+
+```
+make
+```
+Ejecutar el generador:
+
+```
+./generator
+```
+
 
 Esto obtiene como resultado una tabla en formato HTML.
 
